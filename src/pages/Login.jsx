@@ -46,6 +46,13 @@ export default function Login() {
       <button type="button" onClick={handleLogin}>
         Login
       </button>
+
+      <button
+        type="button"
+        onClick={() => navigate("/register")}
+      >
+      Student Register
+      </button>
     </div>
   );
 }
