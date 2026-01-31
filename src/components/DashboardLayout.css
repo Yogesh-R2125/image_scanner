@@ -234,3 +234,36 @@ button:disabled {
   cursor: not-allowed;
 }
 
+/* ===== SIDEBAR ===== */
+.dash-sidebar {
+  width: 230px;
+  background: #1f2937;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== USER INFO (TOP LEFT) ===== */
+.sidebar-user {
+  margin-bottom: 25px;
+}
+
+.sidebar-user h2 {
+  font-size: 20px;
+  margin: 0;
+  color: #ffffff;
+}
+
+/* FORCE USERNAME TO BE VISIBLE */
+.logged-user {
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #f9fafb;     /* 👈 VERY LIGHT */
+  white-space: nowrap;
+  overflow: visible;
+  display: block;
+}
+
+
