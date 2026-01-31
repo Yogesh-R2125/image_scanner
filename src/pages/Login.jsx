@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import api from "../api/axios";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import "../App.css";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -43,16 +44,17 @@ export default function Login() {
         onChange={e => setPassword(e.target.value)}
       />
 
-      <button type="button" onClick={handleLogin}>
-        Login
-      </button>
-
-      <button
-        type="button"
-        onClick={() => navigate("/register")}
-      >
-      Student Register
-      </button>
+    <div className="login-btn">
+        <button onClick={handleLogin}>
+          Login
+        </button>
+    
+        <button
+          onClick={() => navigate("/register")}
+        >
+        Student Register
+        </button>
+      </div>
     </div>
   );
 }

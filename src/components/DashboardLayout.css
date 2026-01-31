@@ -1,0 +1,236 @@
+/* ================== GLOBAL ================== */
+body {
+  margin: 0;
+  background: #f4f6f8;
+  font-family: Arial, sans-serif;
+}
+
+/* ================== MAIN LAYOUT ================== */
+.dash-layout {
+  display: flex;
+  height: 100vh;
+  background: #f3f4f6;
+}
+
+/* ================== SIDEBAR ================== */
+.dash-sidebar {
+  width: 230px;
+  background: #1f2937;
+  color: #fff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.menu-btn {
+  background: #374151;
+  border: none;
+  color: white;
+  padding: 12px;
+  margin-bottom: 8px;
+  text-align: left;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.menu-btn:hover,
+.menu-btn.active {
+  background: #2563eb;
+}
+
+.logout-btn {
+  margin-top: auto;
+  background: #dc2626;
+  border: none;
+  padding: 12px;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ================== MAIN AREA ================== */
+.dash-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.dash-header {
+  background: white;
+  padding: 15px 25px;
+  border-bottom: 1px solid #ddd;
+  font-weight: bold;
+}
+
+.dash-content {
+  padding: 25px;
+  overflow-y: auto;
+}
+
+/* ================== UPLOAD / ADD CATEGORY ================== */
+.upload-box,
+.add-category {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.upload-box input,
+.upload-box select,
+.add-category input {
+  padding: 10px;
+  flex: 1;               /* ✅ FIXED */
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.upload-box button,
+.add-category button {
+  padding: 10px 20px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ================== STUDENT IMAGE GRID ================== */
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 15px;
+}
+
+.card {
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.card img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.card span {
+  font-weight: bold;
+}
+
+.approved { color: green; }
+.rejected { color: red; }
+.pending  { color: orange; }
+
+/* ================== ADMIN ================== */
+.admin-content {
+  max-width: 1300px;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+/* 🔥 IMPORTANT: JSX uses `.card`, NOT `.admin-card` */
+.admin-grid .card img {
+  height: auto;
+  max-height: 220px;
+  object-fit: contain;
+}
+
+/* ================== ADMIN ACTION BUTTONS ================== */
+.admin-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.admin-actions button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.approve-btn {
+  background: #16a34a;
+  color: white;
+}
+
+.reject-btn {
+  background: #dc2626;
+  color: white;
+}
+
+/* ================== FULL IMAGE PREVIEW MODAL ================== */
+.image-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.image-modal-img {
+  max-width: 95vw;
+  max-height: 95vh;
+  object-fit: contain;
+  border-radius: 8px;
+  background: white;
+}
+
+/* CLOSE BUTTON */
+.close-btn {
+  position: fixed;
+  top: 20px;
+  right: 30px;
+  color: white;
+  font-size: 32px;
+  cursor: pointer;
+  z-index: 10000;
+}
+
+/* ================== RESPONSIVE ================== */
+@media (max-width: 768px) {
+  .dash-sidebar {
+    width: 180px;
+  }
+
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.approved {
+  color: green;
+  font-weight: bold;
+}
+
+.rejected {
+  color: red;
+  font-weight: bold;
+}
+
+.pending {
+  color: orange;
+  font-weight: bold;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+

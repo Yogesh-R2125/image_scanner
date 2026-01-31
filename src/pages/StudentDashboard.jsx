@@ -1,124 +1,111 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
-import { useNavigate } from "react-router-dom";
-import "../App.css";
+import DashboardLayout from "../components/DashboardLayout";
+import  "../App.css";
 
 export default function StudentDashboard() {
   const [images, setImages] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [file, setFile] = useState(null);
   const [category, setCategory] = useState("");
-  const navigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
-  // fetch images
+  /* ---------- load images ---------- */
   const loadImages = async () => {
-    try {
-      const res = await api.get("/student/images");
-      setImages(res.data);
-    } catch (err) {
-      console.error("Load images failed", err);
-    }
+    const res = await api.get("/student/images");
+    setImages(res.data);
+  };
+
+  /* ---------- load categories ---------- */
+  const loadCategories = async () => {
+    const res = await api.get("/categories");
+    setCategories(res.data);
   };
 
   useEffect(() => {
     loadImages();
+    loadCategories();
   }, []);
 
-  // upload
+  /* ---------- upload image ---------- */
   const uploadImage = async () => {
     if (!file || !category) {
-      alert("Select category and image");
+      alert("Select image and category");
       return;
     }
 
-    try {
-      const formData = new FormData();
-      formData.append("image", file);
-      formData.append("category", category);
+    const formData = new FormData();
+    formData.append("image", file);
+    formData.append("category", category);
 
-      await api.post("/student/upload", formData);
+    await api.post("/student/upload", formData);
 
-      setFile(null);
-      setCategory("");
-
-      // refresh list
-      loadImages();
-    } catch (err) {
-      console.error("Upload failed", err);
-      alert("Upload failed");
-    }
+    setFile(null);
+    setCategory("");
+    loadImages();
   };
 
-  const logout = () => {
-    localStorage.clear();
-    navigate("/");
-  };
+  /* ---------- sidebar menu ---------- */
+  const menu = [
+    { label: "All", onClick: () => setSelectedCategory("All") },
+    ...categories.map(c => ({
+      label: c.name,
+      onClick: () => setSelectedCategory(c.name)
+    }))
+  ];
+
+  const filteredImages =
+    selectedCategory === "All"
+      ? images
+      : images.filter(img => img.category === selectedCategory);
 
   return (
-    <div style={{ padding: 30 }}>
+    <DashboardLayout title="Student Image Upload" menu={menu}>
 
-      <div className="header">
-        <h2>Student Dashboard</h2>
-        <button className="logout-btn" onClick={logout}>
-          Logout
+      {/* ===== UPLOAD BOX ===== */}
+      <div className="upload-box">
+        <select
+          value={category}
+          onChange={e => setCategory(e.target.value)}
+        >
+          <option value="">Select Category</option>
+          {categories.map(c => (
+            <option key={c.id} value={c.name}>
+              {c.name}
+            </option>
+          ))}
+        </select>
+
+        <input
+          type="file"
+          onChange={e => setFile(e.target.files[0])}
+        />
+
+        <button onClick={uploadImage}>
+          Upload
         </button>
       </div>
 
-      <hr />
-
-      <h3>Upload Image</h3>
-
-      <select value={category} onChange={(e) => setCategory(e.target.value)}>
-        <option value="">Select Category</option>
-        <option value="Nature">Nature</option>
-        <option value="Objects">Objects</option>
-        <option value="People">People</option>
-        <option value="Technology">Technology</option>
-      </select>
-
-      <br /><br />
-
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => setFile(e.target.files[0])}
-      />
-
-      <br /><br />
-
-      <button id="upload-btn" onClick={uploadImage}>Upload</button>
-
-      <hr />
-
-      <h3>Your Images</h3>
-
-      {images.length === 0 && <p>No images uploaded yet</p>}
-
-      <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
-        {images.map((img) => (
-          <div key={img.id} style={{ border: "1px solid #ccc", padding: 10 }}>
+      {/* ===== IMAGE LIST ===== */}
+      <div className="image-grid">
+        {filteredImages.map(img => (
+          <div key={img.id} className="card">
             <img
               src={`http://localhost:5000/uploads/${img.filename}`}
               alt=""
-              width="200"
-              onClick={() =>
-                window.open(
-                  `http://localhost:5000/uploads/${img.filename}`,
-                  "_blank"
-                )
-              }
             />
-            <p>Category: {img.category}</p>
-            <p>
-              Status:{" "}
+            <p>{img.category}</p>
+            <span>
               {img.approved
                 ? "Approved"
                 : img.rejected
                 ? "Rejected"
                 : "Pending"}
-            </p>
+            </span>
           </div>
         ))}
       </div>
-    </div>
+
+    </DashboardLayout>
   );
 }

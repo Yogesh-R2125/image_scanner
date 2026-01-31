@@ -1,6 +1,7 @@
 import { useState } from "react";
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
+import "../App.css";
 
 export default function Register() {
   const [username, setUsername] = useState("");
@@ -41,7 +42,7 @@ export default function Register() {
         onChange={(e) => setPassword(e.target.value)}
       />
 
-      <button type="button" onClick={handleRegister}>
+      <button className="register-btn" type="button" onClick={handleRegister}>
         Register
       </button>
     </div>

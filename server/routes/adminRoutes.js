@@ -1,44 +1,96 @@
 const express = require("express");
-const auth = require("../middleware/authMiddleware");
 const db = require("../db");
+const verifyAdmin = require("../middleware/verifyAdmin");
 
 const router = express.Router();
 
-/* Get all images with student name */
-router.get("/images", auth("admin"), (req, res) => {
-  db.query(
-    `
-    SELECT images.*, users.username AS studentName
+router.get("/images", verifyAdmin, (req, res) => {
+  const sql = `
+    SELECT 
+      images.id,
+      images.filename,
+      images.category,
+      images.status,
+      users.username AS studentName
     FROM images
-    JOIN users ON images.student_id = users.id
-    ORDER BY images.created_at DESC
-    `,
-    (err, rows) => {
+    INNER JOIN users ON images.student_id = users.id
+  `;
+
+  db.query(sql, (err, rows) => {
+    if (err) {
+      console.error("ADMIN /images ERROR:", err);
+      return res.status(500).json(err);
+    }
+    res.json(rows);
+  });
+});
+
+/**
+ * APPROVE IMAGE
+ */
+router.put("/approve/:id", verifyAdmin, (req, res) => {
+  db.query(
+    "UPDATE images SET status = 'approved' WHERE id = ?",
+    [req.params.id],
+    (err) => {
       if (err) {
-        console.error(err);
-        return res.sendStatus(500);
+        console.error("APPROVE ERROR:", err);
+        return res.status(500).json({ error: "Approve failed" });
       }
-      res.json(rows);
+      res.json({ message: "Approved" });
     }
   );
 });
 
-/* Approve */
-router.put("/approve/:id", auth("admin"), (req, res) => {
+/**
+ * REJECT IMAGE
+ */
+router.put("/reject/:id", verifyAdmin, (req, res) => {
   db.query(
-    "UPDATE images SET approved=TRUE, rejected=FALSE WHERE id=?",
+    "UPDATE images SET status = 'rejected' WHERE id = ?",
     [req.params.id],
-    () => res.json({ message: "Approved" })
+    (err) => {
+      if (err) {
+        console.error("REJECT ERROR:", err);
+        return res.status(500).json({ error: "Reject failed" });
+      }
+      res.json({ message: "Rejected" });
+    }
   );
 });
 
-/* Reject */
-router.put("/reject/:id", auth("admin"), (req, res) => {
+/**
+ * ADD CATEGORY
+ */
+router.post("/category", verifyAdmin, (req, res) => {
+  const { name } = req.body;
+
+  if (!name) {
+    return res.status(400).json({ message: "Category name required" });
+  }
+
   db.query(
-    "UPDATE images SET rejected=TRUE, approved=FALSE WHERE id=?",
-    [req.params.id],
-    () => res.json({ message: "Rejected" })
+    "INSERT INTO categories (name) VALUES (?)",
+    [name],
+    (err) => {
+      if (err) {
+        console.error("CATEGORY ERROR:", err);
+        return res.status(500).json({ error: "Category add failed" });
+      }
+      res.json({ message: "Category added" });
+    }
   );
 });
+
+router.get("/categories", verifyAdmin, (req, res) => {
+  db.query("SELECT name FROM categories", (err, rows) => {
+    if (err) {
+      console.error("CATEGORIES ERROR:", err);
+      return res.status(500).json(err);
+    }
+    res.json(rows);
+  });
+});
+
 
 module.exports = router;
