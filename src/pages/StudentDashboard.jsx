@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
 import DashboardLayout from "../components/DashboardLayout";
-import  "../App.css";
+import "../App.css";
 
 export default function StudentDashboard() {
   const [images, setImages] = useState([]);
@@ -90,18 +90,40 @@ export default function StudentDashboard() {
       <div className="image-grid">
         {filteredImages.map(img => (
           <div key={img.id} className="card">
+
             <img
               src={`http://localhost:5000/uploads/${img.filename}`}
               alt=""
             />
-            <p>{img.category}</p>
-            <span>
-              {img.approved
-                ? "Approved"
-                : img.rejected
-                ? "Rejected"
-                : "Pending"}
-            </span>
+
+            <p><b>Category:</b> {img.category}</p>
+
+            <span><b>Status:</b> {img.status}</span>
+
+            {/* Upload Time */}
+            <p>
+              <b>Uploaded:</b>{" "}
+              {img.uploaded_at
+                ? new Date(img.uploaded_at).toLocaleString()
+                : "-"}
+            </p>
+
+            {/* Approved Time */}
+            {img.approved_at && (
+              <p>
+                <b>Approved:</b>{" "}
+                {new Date(img.approved_at).toLocaleString()}
+              </p>
+            )}
+
+            {/* Rejected Time */}
+            {img.rejected_at && (
+              <p>
+                <b>Rejected:</b>{" "}
+                {new Date(img.rejected_at).toLocaleString()}
+              </p>
+            )}
+
           </div>
         ))}
       </div>

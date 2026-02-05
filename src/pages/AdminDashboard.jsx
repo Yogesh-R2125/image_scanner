@@ -134,6 +134,17 @@ const filteredImages = images.filter(img => {
               <p><b>Student:</b> {img.studentName}</p>
               <p><b>Category:</b> {img.category}</p>
 
+              <p><b>Uploaded:</b> {new Date(img.uploaded_at).toLocaleString()}</p>
+
+                    {img.approved_at && (
+               <p><b>Approved:</b> {new Date(img.approved_at).toLocaleString()}</p>
+              )}
+
+                    {img.rejected_at && (
+                    <p><b>Rejected:</b> {new Date(img.rejected_at).toLocaleString()}</p>
+      )}
+
+
               <p>
                 <b>Status:</b>{" "}
                 <span className={status}>

@@ -4,6 +4,7 @@ const verifyAdmin = require("../middleware/verifyAdmin");
 
 const router = express.Router();
 
+/* ================= IMAGES LIST ================= */
 router.get("/images", verifyAdmin, (req, res) => {
   const sql = `
     SELECT 
@@ -11,6 +12,9 @@ router.get("/images", verifyAdmin, (req, res) => {
       images.filename,
       images.category,
       images.status,
+      images.uploaded_at,
+      images.approved_at,
+      images.rejected_at,
       users.username AS studentName
     FROM images
     INNER JOIN users ON images.student_id = users.id
@@ -25,12 +29,16 @@ router.get("/images", verifyAdmin, (req, res) => {
   });
 });
 
-/**
- * APPROVE IMAGE
- */
+/* ================= APPROVE IMAGE ================= */
 router.put("/approve/:id", verifyAdmin, (req, res) => {
   db.query(
-    "UPDATE images SET status = 'approved' WHERE id = ?",
+    `
+    UPDATE images 
+    SET status='approved',
+        approved_at = NOW(),
+        rejected_at = NULL
+    WHERE id = ?
+    `,
     [req.params.id],
     (err) => {
       if (err) {
@@ -42,12 +50,16 @@ router.put("/approve/:id", verifyAdmin, (req, res) => {
   );
 });
 
-/**
- * REJECT IMAGE
- */
+/* ================= REJECT IMAGE ================= */
 router.put("/reject/:id", verifyAdmin, (req, res) => {
   db.query(
-    "UPDATE images SET status = 'rejected' WHERE id = ?",
+    `
+    UPDATE images 
+    SET status='rejected',
+        rejected_at = NOW(),
+        approved_at = NULL
+    WHERE id = ?
+    `,
     [req.params.id],
     (err) => {
       if (err) {
@@ -59,19 +71,17 @@ router.put("/reject/:id", verifyAdmin, (req, res) => {
   );
 });
 
-/**
- * ADD CATEGORY
- */
+/* ================= ADD CATEGORY ================= */
 router.post("/category", verifyAdmin, (req, res) => {
-  const { name } = req.body;
+  const { name, parent_id } = req.body;
 
   if (!name) {
     return res.status(400).json({ message: "Category name required" });
   }
 
   db.query(
-    "INSERT INTO categories (name) VALUES (?)",
-    [name],
+    "INSERT INTO categories (name, parent_id) VALUES (?, ?)",
+    [name, parent_id || null],
     (err) => {
       if (err) {
         console.error("CATEGORY ERROR:", err);
@@ -82,15 +92,35 @@ router.post("/category", verifyAdmin, (req, res) => {
   );
 });
 
-router.get("/categories", verifyAdmin, (req, res) => {
-  db.query("SELECT name FROM categories", (err, rows) => {
-    if (err) {
-      console.error("CATEGORIES ERROR:", err);
-      return res.status(500).json(err);
+/* ================= UPDATE CATEGORY ================= */
+router.put("/category/:id", verifyAdmin, (req, res) => {
+  const { name, parent_id } = req.body;
+
+  db.query(
+    "UPDATE categories SET name=?, parent_id=? WHERE id=?",
+    [name, parent_id || null, req.params.id],
+    (err) => {
+      if (err) {
+        console.error("CATEGORY UPDATE ERROR:", err);
+        return res.status(500).json(err);
+      }
+      res.json({ message: "Category updated" });
     }
-    res.json(rows);
-  });
+  );
 });
 
+/* ================= CATEGORY LIST ================= */
+router.get("/categories", verifyAdmin, (req, res) => {
+  db.query(
+    "SELECT id, name, parent_id FROM categories",
+    (err, rows) => {
+      if (err) {
+        console.error("CATEGORIES ERROR:", err);
+        return res.status(500).json(err);
+      }
+      res.json(rows);
+    }
+  );
+});
 
 module.exports = router;

@@ -1,31 +1,41 @@
-/* ================== GLOBAL ================== */
+/* =======================
+   GENERAL
+======================= */
 body {
   margin: 0;
   background: #f4f6f8;
   font-family: Arial, sans-serif;
 }
 
-/* ================== MAIN LAYOUT ================== */
+/* =======================
+   DASHBOARD LAYOUT
+======================= */
 .dash-layout {
   display: flex;
   height: 100vh;
-  background: #f3f4f6;
 }
 
-/* ================== SIDEBAR ================== */
+/* =======================
+   SIDEBAR
+======================= */
 .dash-sidebar {
   width: 230px;
   background: #1f2937;
-  color: #fff;
+  color: white;
   padding: 20px;
   display: flex;
   flex-direction: column;
 }
 
-.logo {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 20px;
+.sidebar-user h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.logged-user {
+  margin-top: 6px;
+  color: #e5e7eb;
+  font-size: 14px;
 }
 
 .menu-btn {
@@ -54,7 +64,9 @@ body {
   cursor: pointer;
 }
 
-/* ================== MAIN AREA ================== */
+/* =======================
+   MAIN AREA
+======================= */
 .dash-main {
   flex: 1;
   display: flex;
@@ -73,25 +85,24 @@ body {
   overflow-y: auto;
 }
 
-/* ================== UPLOAD / ADD CATEGORY ================== */
-.upload-box,
-.add-category {
+/* =======================
+   UPLOAD BOX (STUDENT)
+======================= */
+.upload-box {
   display: flex;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
-.upload-box input,
 .upload-box select,
-.add-category input {
+.upload-box input {
   padding: 10px;
-  flex: 1;               /* ✅ FIXED */
+  flex: 1;
   border-radius: 6px;
   border: 1px solid #ccc;
 }
 
-.upload-box button,
-.add-category button {
+.upload-box button {
   padding: 10px 20px;
   background: #2563eb;
   color: white;
@@ -100,7 +111,14 @@ body {
   cursor: pointer;
 }
 
-/* ================== STUDENT IMAGE GRID ================== */
+.upload-box button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =======================
+   IMAGE GRID (STUDENT)
+======================= */
 .image-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -111,7 +129,7 @@ body {
   background: white;
   padding: 10px;
   border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 
 .card img {
@@ -119,99 +137,75 @@ body {
   height: 140px;
   object-fit: cover;
   border-radius: 8px;
-  cursor: pointer;
+  margin-bottom: 8px;
 }
 
-.card span {
-  font-weight: bold;
-}
-
-.approved { color: green; }
-.rejected { color: red; }
-.pending  { color: orange; }
-
-/* ================== ADMIN ================== */
-.admin-content {
-  max-width: 1300px;
-}
-
+/* =======================
+   ADMIN GRID
+======================= */
 .admin-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
 }
 
-/* 🔥 IMPORTANT: JSX uses `.card`, NOT `.admin-card` */
-.admin-grid .card img {
-  height: auto;
-  max-height: 220px;
-  object-fit: contain;
-}
-
-/* ================== ADMIN ACTION BUTTONS ================== */
 .admin-actions {
   display: flex;
   gap: 10px;
   margin-top: 10px;
 }
 
-.admin-actions button {
+.approve-btn {
   flex: 1;
   padding: 10px;
+  background: #16a34a;
+  color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
 }
 
-.approve-btn {
-  background: #16a34a;
-  color: white;
-}
-
 .reject-btn {
+  flex: 1;
+  padding: 10px;
   background: #dc2626;
   color: white;
-}
-
-/* ================== FULL IMAGE PREVIEW MODAL ================== */
-.image-modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.9);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
-
-.image-modal-img {
-  max-width: 95vw;
-  max-height: 95vh;
-  object-fit: contain;
-  border-radius: 8px;
-  background: white;
-}
-
-/* CLOSE BUTTON */
-.close-btn {
-  position: fixed;
-  top: 20px;
-  right: 30px;
-  color: white;
-  font-size: 32px;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
-  z-index: 10000;
 }
 
-/* ================== RESPONSIVE ================== */
-@media (max-width: 768px) {
-  .dash-sidebar {
-    width: 180px;
-  }
+/* =======================
+   ADD CATEGORY (ADMIN)
+======================= */
+.add-category {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
 
-  .admin-grid {
-    grid-template-columns: 1fr;
-  }
+.add-category input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.add-category button {
+  padding: 10px 20px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* =======================
+   STATUS COLORS
+======================= */
+.pending {
+  color: orange;
+  font-weight: bold;
 }
 
 .approved {
@@ -224,46 +218,55 @@ body {
   font-weight: bold;
 }
 
-.pending {
-  color: orange;
+/* =======================
+   AI RESULT COLORS
+======================= */
+.blurry {
+  color: red;
   font-weight: bold;
 }
 
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.sharp {
+  color: green;
+  font-weight: bold;
 }
 
-/* ===== SIDEBAR ===== */
-.dash-sidebar {
-  width: 230px;
-  background: #1f2937;
-  color: white;
-  padding: 20px;
+/* =======================
+   IMAGE PREVIEW MODAL
+======================= */
+.image-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
 }
 
-/* ===== USER INFO (TOP LEFT) ===== */
-.sidebar-user {
-  margin-bottom: 25px;
+.image-modal-img {
+  max-width: 95vw;
+  max-height: 95vh;
+  border-radius: 8px;
+  background: white;
 }
 
-.sidebar-user h2 {
-  font-size: 20px;
-  margin: 0;
-  color: #ffffff;
-}
-
-/* FORCE USERNAME TO BE VISIBLE */
-.logged-user {
-  margin-top: 8px;
-  font-size: 15px;
-  font-weight: 500;
-  color: #f9fafb;     /* 👈 VERY LIGHT */
-  white-space: nowrap;
-  overflow: visible;
-  display: block;
+.close-btn {
+  position: fixed;
+  top: 20px;
+  right: 30px;
+  color: white;
+  font-size: 32px;
+  cursor: pointer;
 }
 
 
+.blurry {
+  color: red;
+  font-weight: bold;
+}
+
+.sharp {
+  color: green;
+  font-weight: bold;
+}
