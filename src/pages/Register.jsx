@@ -1,7 +1,6 @@
 import { useState } from "react";
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
-import "../App.css";
 
 export default function Register() {
   const [username, setUsername] = useState("");
@@ -28,23 +27,43 @@ export default function Register() {
   };
 
   return (
-    <div className="container">
-      <h2>Student Registration</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
 
-      <input
-        placeholder="Username"
-        onChange={(e) => setUsername(e.target.value)}
-      />
+      <div className="bg-white p-10 rounded-xl shadow-lg w-full max-w-md">
 
-      <input
-        type="password"
-        placeholder="Password"
-        onChange={(e) => setPassword(e.target.value)}
-      />
+        <h2 className="text-2xl font-bold mb-6 text-center">
+          Student Registration
+        </h2>
 
-      <button className="register-btn" type="button" onClick={handleRegister}>
-        Register
-      </button>
+        <input
+          placeholder="Username"
+          onChange={(e) => setUsername(e.target.value)}
+          className="w-full mb-4 px-4 py-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+
+        <input
+          type="password"
+          placeholder="Password"
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full mb-6 px-4 py-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+
+        <button
+          onClick={handleRegister}
+          className="w-full py-3 bg-green-600 text-white rounded hover:bg-green-700 transition"
+        >
+          Register
+        </button>
+
+        <button
+          onClick={() => navigate("/")}
+          className="w-full mt-3 py-3 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+        >
+          Back to Login
+        </button>
+
+      </div>
+
     </div>
   );
 }
